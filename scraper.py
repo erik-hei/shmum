@@ -1,11 +1,23 @@
 import requests
 import json
 
-def scrape_athleta(pid):
+gap = {
+    'gap' : {'passkey' : 'tpy1b18t8bg5lp4y9hfs0qm31', 'displaycode' : '3755_27_0-en_us'},
+    'athleta' : {'passkey' : '7dtpedhgbgp2vn5p0ykid4opx', 'displaycode' : '3755_22_0-en_us'},
+    'old_navy' : {'passkey' : '68zs04f4b1e7jqc41fgx0lkwj', 'displaycode' : '3755_31_0-en_us'},
+    'bananna_republic' : {'passkey' : '2glht20d3jzlz3mliy36ffiwn', 'displaycode' : '3755_23_0-en_us'}
+}
+
+def scrape(pid, source):
+    if source in gap:
+        return scrape_gap(pid, source)
+
+def scrape_gap(pid, source):
     url = 'https://api.bazaarvoice.com/data/batch.json?'
     query = (
-        'passkey=7dtpedhgbgp2vn5p0ykid4opx&apiversion=5.5&'
-        'displaycode=3755_22_0-en_us&'
+        'passkey=' + gap[source]['passkey'] + '&'
+        'apiversion=5.5&'
+        'displaycode=' + gap[source]['displaycode'] + '&'
         'resource.q0=products&'
         'filter.q0=id%3Aeq%3A' + str(pid) + '&'
         'stats.q0=reviews&'
@@ -22,8 +34,9 @@ def scrape_athleta(pid):
         limit = 100
         offset = 100 * i
         query = (
-            'passkey=7dtpedhgbgp2vn5p0ykid4opx&apiversion=5.5&'
-            'displaycode=3755_22_0-en_us&'
+            'passkey=' + gap[source]['passkey'] + '&'
+            'apiversion=5.5&'
+            'displaycode=' + gap[source]['displaycode'] + '&'
             'resource.q1=reviews&'
             'filter.q1=isratingsonly%3Aeq%3Afalse&'
             'filter.q1=productid%3Aeq%3A' + str(pid) + '&'
